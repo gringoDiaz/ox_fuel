@@ -61,8 +61,16 @@ RegisterNetEvent('ox_fuel:fuelCan', function(hasCan, price)
 				})
 			end
 
-			ox_inventory:AddItem(source, 'WEAPON_PETROLCAN', 1)
+			local item = ox_inventory:Search(source, 'slots', 'WEAPON_PETROLCAN')
+			if item then
+				item = item[1]
+				item.metadata.durability = 100
+				item.metadata.ammo = 100
 
+				ox_inventory:SetMetadata(source, item.slot, item.metadata)
+			end
+
+			ox_inventory:AddItem(source, 'WEAPON_PETROLCAN', 1)
 			ox_inventory:RemoveItem(source, 'money', price)
 			TriggerClientEvent('ox_lib:notify', source, {
 				type = 'success',
